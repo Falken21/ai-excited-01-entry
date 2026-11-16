@@ -1,40 +1,39 @@
-"""ai-excited-01 entry: write the chalk-dragon image to the output directory.
+#!/usr/bin/env python3
+"""Entry point for the ai-excited-01 submission, "The Chalk Dragon".
 
-The repository holds the finished image as entry.png. This program copies
-it, byte for byte, to <output>/entry.png, where <output> is the directory
-named by MAKEFUN_OUTPUT_DIR when that variable is set and /output
-otherwise (the sandbox layout). Copying a stored file is what makes the
-two grading runs produce identical bytes.
+The artwork is a fixed file, ``entry.png``, stored next to this script.
+Running the program copies those exact bytes into the output directory,
+so every grading run produces an identical result.
 """
 
 import os
 import shutil
-from pathlib import Path
+import sys
 
-IMAGE_NAME = "entry.png"
-
-
-def source_image() -> Path:
-    """The image stored beside this file, wherever the program is run from."""
-    return Path(__file__).resolve().parent / IMAGE_NAME
+DEFAULT_OUTPUT_DIR = "/output"
+OUTPUT_ENV_VAR = "MAKEFUN_OUTPUT_DIR"
+ENTRY_FILENAME = "entry.png"
 
 
-def output_path() -> Path:
-    """Where the judge's copy goes: MAKEFUN_OUTPUT_DIR, else /output."""
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
-    return Path(out_dir) / IMAGE_NAME
+def source_file() -> str:
+    """Path of the stored artwork, resolved from this script's location."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(here, ENTRY_FILENAME)
 
 
-def main() -> None:
-    src = source_image()
-    if not src.is_file():
-        raise SystemExit(f"stored image is missing: {src}")
-    dst = output_path()
-    dst.parent.mkdir(parents=True, exist_ok=True)
-    with src.open("rb") as fin, dst.open("wb") as fout:
-        shutil.copyfileobj(fin, fout, length=256 * 1024)
-    print(f"wrote {dst} ({dst.stat().st_size} bytes)")
+def destination_file() -> str:
+    """Path the artwork must be written to for the current run."""
+    out_dir = os.environ.get(OUTPUT_ENV_VAR) or DEFAULT_OUTPUT_DIR
+    return os.path.join(out_dir, ENTRY_FILENAME)
+
+
+def main() -> int:
+    src = source_file()
+    dst = destination_file()
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    shutil.copyfile(src, dst)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

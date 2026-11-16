@@ -1,18 +1,21 @@
 # The Chalk Dragon — ai-excited-01
 
-On a patch of dark asphalt, a dragon that a child sketched in pastel chalk
-is caught in the middle of bursting into life. Its head, chest and front
-legs have already torn free of the pavement as a real creature — glossy
-teal scales split by veins of glowing golden light, wings spread, mouth
-open in a delighted grin as it lunges toward the viewer. Behind it, the
-rest of the body has not caught up yet: the tail and hindquarters are still
-flat chalk outlines and puffs of pink, mint and yellow dust on the ground,
-with a few stubby chalk sticks scattered where the artist dropped them.
+A dragon that began as a child's pastel chalk sketch on dark asphalt is
+caught in the middle of bursting into life. Its front half has already
+become real: glossy teal scales split by veins of golden light, one claw
+reaching out of the picture, head thrown toward the viewer with a wide,
+delighted, can't-keep-it-in grin. Behind that glowing seam of cracks, the
+rest of the creature is still only chalk — looping pastel lines, smudged
+colour and loose dust on the rough black ground, with dropped chalk sticks
+scattered where its tail fades back into drawing. The whole picture is the
+moment excitement wins: half imagination, half alive, and thrilled about it.
 
-The picture itself is stored in this repository as `entry.png`, a
-1024×1024 image. Running `main.py` simply copies that stored file into the
-output directory — the folder named by the `MAKEFUN_OUTPUT_DIR`
-environment variable when one is set, or `/output` otherwise — creating
-the directory first if it does not exist. Because the program always
-copies the same stored bytes and never redraws anything, both grading
-runs produce exactly the same image.
+## How the entry works
+
+The artwork is stored in the repository as `entry.png`, a 1024×1024 image.
+`main.py` does not draw anything; when run, it simply copies the stored
+`entry.png` into the output directory (the folder named by the
+`MAKEFUN_OUTPUT_DIR` environment variable, or `/output` when that is not
+set), creating the directory first if it does not exist. Because the same
+stored bytes are copied every time, both grading runs produce exactly the
+same image.

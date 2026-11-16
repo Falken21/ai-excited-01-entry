@@ -1,37 +1,36 @@
 #!/usr/bin/env python3
-"""Entry point for the ai-excited-01 submission, "The Chalk Dragon".
+"""Entry point for The Chalk Dragon (ai-excited-01).
 
-The artwork is a fixed file, ``entry.png``, stored next to this script.
-Running the program copies those exact bytes into the output directory,
-so every grading run produces an identical result.
+The artwork ships as a stored file, ``entry.png``, sitting next to this
+script. Running the program copies those exact bytes into the output
+directory, so every grading run produces a byte-identical image.
 """
 
 import os
 import shutil
 import sys
 
-DEFAULT_OUTPUT_DIR = "/output"
-OUTPUT_ENV_VAR = "MAKEFUN_OUTPUT_DIR"
-ENTRY_FILENAME = "entry.png"
+HERE = os.path.dirname(os.path.abspath(__file__))
+SOURCE = os.path.join(HERE, "entry.png")
+FALLBACK_OUTPUT_DIR = "/output"
 
 
-def source_file() -> str:
-    """Path of the stored artwork, resolved from this script's location."""
-    here = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(here, ENTRY_FILENAME)
-
-
-def destination_file() -> str:
-    """Path the artwork must be written to for the current run."""
-    out_dir = os.environ.get(OUTPUT_ENV_VAR) or DEFAULT_OUTPUT_DIR
-    return os.path.join(out_dir, ENTRY_FILENAME)
+def resolve_output_dir() -> str:
+    """Return the directory the artwork should be written to."""
+    return os.environ.get("MAKEFUN_OUTPUT_DIR") or FALLBACK_OUTPUT_DIR
 
 
 def main() -> int:
-    src = source_file()
-    dst = destination_file()
-    os.makedirs(os.path.dirname(dst), exist_ok=True)
-    shutil.copyfile(src, dst)
+    if not os.path.isfile(SOURCE):
+        print(f"error: stored artwork not found at {SOURCE}", file=sys.stderr)
+        return 1
+
+    output_dir = resolve_output_dir()
+    os.makedirs(output_dir, exist_ok=True)
+
+    destination = os.path.join(output_dir, "entry.png")
+    shutil.copyfile(SOURCE, destination)
+    print(f"wrote {destination} ({os.path.getsize(destination)} bytes)")
     return 0
 
 
